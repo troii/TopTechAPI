@@ -1,0 +1,129 @@
+swagger: "2.0"
+info:
+  version: 0.0.1
+  title: TopTech
+  description: Beispiel API für die Integration von TopTech Kassen mit Moosmayr Auftragserfassung
+  contact:
+    name: troii Software GmbH
+    email: office@troii.com
+    url: http://troii.com
+host: auftragserfassung.moosmayr.at
+basePath: /api/toptech
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /auftraege:
+    get:
+      description: |
+        Liefert alle Aufträge passend zu den Filterkriterien
+      operationId: findAufträge
+      parameters:
+        - name: abgeschlossen
+          in: query
+          description: Nur abgeschlossene Auftäge liefern?
+          required: false
+          type: boolean
+        - name: seit
+          in: query
+          description: Aufträge seit wann?
+          required: false
+          type: string
+          format: date
+      responses:
+        200:
+          description: Aufträge
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Auftrag'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /artikel:
+    get:
+      description: |
+        Liefert alle Artikel
+      operationId: findArtikel
+      responses:
+        200:
+          description: Artikel
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Artikel'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'            
+definitions:
+  Auftrag:
+    allOf:
+      - required:
+        - id
+        properties:
+          id:
+            type: integer
+            format: int64
+          abgeschlossen:
+            type: boolean
+          positionen:
+            type: array
+            items:
+              $ref: '#/definitions/AuftragsPosition'
+  AuftragsPosition:
+    allOf:
+      - required:
+          - position
+        properties:
+          position:
+            type: integer
+            format: int64
+          artikelnummer:
+            type: string
+          bezeichnung:
+            type: string
+          mengegeliefert:
+            type: number
+            format: float
+            minimum: 0
+          einzelpreis:
+            type: number
+            format: float
+            minimum: 0
+  Artikel:
+    allOf:
+      - required:
+        - id
+        - artikelnummer
+        - bezeichnung
+        properties:
+          id:
+            type: integer
+            format: int64
+            minimum: 0
+          artikelnummer:
+            type: string
+          bezeichnung:
+            type: string
+          eanCode:
+            type: string
+          verpackung:
+            type: string
+          losgroesse:
+            type: integer
+            minimum: 0
+  Error:
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
