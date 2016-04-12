@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   version: 0.0.1
-  title: TopTech
+  title: TopTech API für Auftragserfassungnamed 
   description: Beispiel API für die Integration von TopTech Kassen mit Moosmayr Auftragserfassung
   contact:
     name: troii Software GmbH
@@ -60,15 +60,15 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'         
-  /artikel/{id}:
+  /artikel/{artikelnummer}:
     get:
       description: |
-        Liefert alle Artikel
+        Liefert einen Artikel
       operationId: getArtikel
       parameters:
-        - name: id
+        - name: artikelnummer
           in: path
-          description: ID des gesuchten Artikels
+          description: Artikelnummer des gesuchten Artikels
           required: true
           type: number
       responses:
