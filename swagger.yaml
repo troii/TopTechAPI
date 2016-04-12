@@ -59,7 +59,27 @@ paths:
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/Error'            
+            $ref: '#/definitions/Error'         
+  /artikel/{id}:
+    get:
+      description: |
+        Liefert alle Artikel
+      operationId: getArtikel
+      parameters:
+        - name: id
+          in: path
+          description: ID des gesuchten Artikels
+          required: true
+          type: number
+      responses:
+        200:
+          description: Artikel
+          schema:
+            $ref: '#/definitions/Artikel'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'                     
 definitions:
   Auftrag:
     allOf:
@@ -98,14 +118,9 @@ definitions:
   Artikel:
     allOf:
       - required:
-        - id
         - artikelnummer
         - bezeichnung
         properties:
-          id:
-            type: integer
-            format: int64
-            minimum: 0
           artikelnummer:
             type: string
           bezeichnung:
